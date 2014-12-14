@@ -7,4 +7,12 @@ public class RecognizeResponse {
 
     public String status;
     public String name;
+
+    @Override
+    public String toString() {
+        return "RecognizeResponse{" +
+                "status='" + status + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
