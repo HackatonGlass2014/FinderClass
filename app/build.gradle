@@ -1,6 +1,11 @@
 apply plugin: 'com.android.application'
 
 repositories {
+
+    maven {
+        url 'https://raw.github.com/zeeshanejaz/unirest-android/mvn-repo'
+    }
+
     jcenter()
     flatDir {
         dirs 'prebuilt-libs'
@@ -34,4 +39,5 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.squareup.retrofit:retrofit:1.8.0'
+    compile 'com.squareup.picasso:picasso:2.4.0'
 }

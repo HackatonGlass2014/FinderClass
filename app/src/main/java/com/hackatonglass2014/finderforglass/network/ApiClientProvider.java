@@ -21,7 +21,7 @@ public class ApiClientProvider {
             client = new RestAdapter.Builder()
                     .setEndpoint(Endpoints.newFixedEndpoint(BASE_ENDPOINT))
                     .setRequestInterceptor(getRequestInterceptor())
-                    .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
+                    .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.HEADERS_AND_ARGS : RestAdapter.LogLevel.NONE)
                     .build().create(ApiClient.class);
         }
         return client;

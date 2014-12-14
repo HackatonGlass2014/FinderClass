@@ -15,4 +15,8 @@ public class RecognizeResponse {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+    public boolean isCompleted() {
+        return status.equals("completed");
+    }
 }

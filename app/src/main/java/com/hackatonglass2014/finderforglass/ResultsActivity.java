@@ -1,7 +1,7 @@
 package com.hackatonglass2014.finderforglass;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,7 +17,7 @@ import retrofit.client.Response;
 import retrofit.mime.TypedFile;
 
 
-public class ResultsActivity extends Activity {
+public class ResultsActivity extends BaseActivity {
 
     TextView status;
     View progress;
@@ -40,19 +40,9 @@ public class ResultsActivity extends Activity {
                 new TypedFile("image/*", file),
                 new Callback<UploadResponse>() {
                     @Override
-                    public void success(UploadResponse uploadResponse, Response response) {
+                    public void success(final UploadResponse uploadResponse, Response response) {
                         status.setText(R.string.recognizing);
-                        ApiClientProvider.provideApiClient().getPhoto(uploadResponse.token, new Callback<RecognizeResponse>() {
-                            @Override
-                            public void success(RecognizeResponse recognizeResponse, Response response) {
-                                status.setText(recognizeResponse.toString());
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                handleError();
-                            }
-                        });
+                        recognizeImage(uploadResponse.token, 10);
                     }
 
                     @Override
@@ -60,6 +50,32 @@ public class ResultsActivity extends Activity {
                         handleError();
                     }
                 });
+    }
+
+    private void recognizeImage(final String token, final int count) {
+        if (count == 0) {
+            return;
+        }
+        ApiClientProvider.provideApiClient().getPhoto(token, new Callback<RecognizeResponse>() {
+            @Override
+            public void success(RecognizeResponse recognizeResponse, Response response) {
+                if (recognizeResponse.isCompleted()) {
+                    status.setText(recognizeResponse.name);
+                } else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            recognizeImage(token, count - 1);
+                        }
+                    }, 10000);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                handleError();
+            }
+        });
     }
 
     private void handleError() {
