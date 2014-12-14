@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FinderForGlass2.iml" filepath="$PROJECT_DIR$/FinderForGlass2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FinderGlass.iml" filepath="$PROJECT_DIR$/FinderGlass.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
