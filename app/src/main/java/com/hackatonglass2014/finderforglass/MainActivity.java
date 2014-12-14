@@ -8,17 +8,14 @@ import android.os.Bundle;
 import android.os.FileObserver;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.MotionEvent;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.google.android.glass.content.Intents;
 import com.google.android.glass.media.Sounds;
-import com.google.android.glass.widget.CardBuilder;
-import com.google.android.glass.widget.CardScrollAdapter;
-import com.google.android.glass.widget.CardScrollView;
+import com.google.android.glass.touchpad.Gesture;
+import com.google.android.glass.touchpad.GestureDetector;
 import com.hackatonglass2014.finderforglass.network.ApiClientProvider;
 import com.hackatonglass2014.finderforglass.network.RecognizeResponse;
 import com.hackatonglass2014.finderforglass.network.UploadResponse;
@@ -36,66 +33,44 @@ public class MainActivity extends Activity {
 
     private static final int CAMERA_REQUEST_CODE = 100;
 
-//    private CardScrollView mCardScroller;
-
     private TextView mView;
+
+    private AudioManager am;
+    private GestureDetector mGestureDetector;
+
+    /** Listener that displays the options menu when the touchpad is tapped. */
+    private final GestureDetector.BaseListener mBaseListener = new GestureDetector.BaseListener() {
+        @Override
+        public boolean onGesture(Gesture gesture) {
+            if (gesture == Gesture.TAP) {
+                am.playSoundEffect(Sounds.TAP);
+                startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_REQUEST_CODE);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        return mGestureDetector.onMotionEvent(event);
+    }
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-//        mView = buildView();
-//
-//        mCardScroller = new CardScrollView(this);
-//        mCardScroller.setAdapter(new CardScrollAdapter() {
-//            @Override
-//            public int getCount() {
-//                return 1;
-//            }
-//
-//            @Override
-//            public Object getItem(int position) {
-//                return mView;
-//            }
-//
-//            @Override
-//            public View getView(int position, View convertView, ViewGroup parent) {
-//                return mView;
-//            }
-//
-//            @Override
-//            public int getPosition(Object item) {
-//                if (mView.equals(item)) {
-//                    return 0;
-//                }
-//                return AdapterView.INVALID_POSITION;
-//            }
-//        });
-//        mCardScroller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_REQUEST_CODE);
-//                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-//                am.playSoundEffect(Sounds.DISALLOWED);
-//            }
-//        });
         setContentView(R.layout.ac_main);
-        mView = (TextView) findViewById(R.id.open_camera);
-        mView.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_REQUEST_CODE);
-                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                am.playSoundEffect(Sounds.TAP);
-            }
-        });
+        init();
+
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        mCardScroller.activate();
+    private void init() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        mGestureDetector = new GestureDetector(this).setBaseListener(mBaseListener);
+        am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mView = (TextView) findViewById(R.id.open_camera);
     }
 
     @Override
@@ -169,17 +144,5 @@ public class MainActivity extends Activity {
                     }
                 });
     }
-
-    @Override
-    protected void onPause() {
-//        mCardScroller.deactivate();
-        super.onPause();
-    }
-
-//    private View buildView() {
-//        CardBuilder card = new CardBuilder(this, CardBuilder.Layout.TEXT);
-//        card.setText(R.string.hello_world);
-//        return card.getView();
-//    }
 
 }
