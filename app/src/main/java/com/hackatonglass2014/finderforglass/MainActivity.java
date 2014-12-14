@@ -18,6 +18,7 @@ import com.google.android.glass.widget.CardBuilder;
 import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
 import com.hackatonglass2014.finderforglass.network.ApiClientProvider;
+import com.hackatonglass2014.finderforglass.network.RecognizeResponse;
 import com.hackatonglass2014.finderforglass.network.UploadResponse;
 
 import java.io.File;
@@ -131,20 +132,30 @@ public class MainActivity extends Activity {
 
     private void processPicture(File pictureFile) {
         Log.v(TAG, "photo complete");
-        /*ApiClientProvider.provideApiClient().uploadPhoto(
-                "en",
+        ApiClientProvider.provideApiClient().uploadPhoto(
+                "en_US",
                 new TypedFile("image/*", pictureFile),
                 new Callback<UploadResponse>() {
                     @Override
                     public void success(UploadResponse uploadResponse, Response response) {
-                        Log.v(TAG, "photo uploaded");
+                        ApiClientProvider.provideApiClient().getPhoto(uploadResponse.token, new Callback<RecognizeResponse>() {
+                            @Override
+                            public void success(RecognizeResponse recognizeResponse, Response response) {
+                                Log.v(TAG, recognizeResponse.name);
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.v(TAG, "error");
+                            }
+                        });
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
                         Log.v(TAG, "error");
                     }
-                });*/
+                });
     }
 
     @Override

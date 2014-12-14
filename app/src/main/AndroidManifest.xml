@@ -3,6 +3,7 @@
     package="com.hackatonglass2014.finderforglass">
 
     <uses-permission android:name="com.google.android.glass.permission.DEVELOPMENT" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,9 +14,9 @@
             android:icon="@drawable/ic_glass_logo"
             android:label="@string/title_activity_main">
             <intent-filter>
-                <!--<action android:name="com.google.android.glass.action.VOICE_TRIGGER" />-->
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
 
             <meta-data

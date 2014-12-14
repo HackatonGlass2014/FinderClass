@@ -1,11 +1,10 @@
 package com.hackatonglass2014.finderforglass.network;
 
 import retrofit.Callback;
-import retrofit.client.Response;
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.Multipart;
 import retrofit.http.POST;
+import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.mime.TypedFile;
 
@@ -14,13 +13,13 @@ import retrofit.mime.TypedFile;
  */
 public interface ApiClient {
 
-    @FormUrlEncoded
+    @Multipart
     @POST("/image_requests")
-    void uploadPhoto(@Field("image_request[locale]") String locale,
-                         @Field("image_request[image]") TypedFile file,
-                         Callback<UploadResponse> callback);
+    void uploadPhoto(@Part("image_request[locale]") String locale,
+                     @Part("image_request[image]") TypedFile file,
+                     Callback<UploadResponse> callback);
 
     @GET("/image_responses/{token}")
     void getPhoto(@Path("token") String imageToken,
-                      Callback<RecognizeResponse> callback);
+                  Callback<RecognizeResponse> callback);
 }
