@@ -38,7 +38,6 @@ public class MainActivity extends Activity {
     private AudioManager am;
     private GestureDetector mGestureDetector;
 
-    /** Listener that displays the options menu when the touchpad is tapped. */
     private final GestureDetector.BaseListener mBaseListener = new GestureDetector.BaseListener() {
         @Override
         public boolean onGesture(Gesture gesture) {
@@ -88,7 +87,7 @@ public class MainActivity extends Activity {
     private void processPictureWhenReady(final String picturePath) {
         final File pictureFile = new File(picturePath);
         if (pictureFile.exists()) {
-            processPicture(pictureFile);
+
         } else {
             final File parentDirectory = pictureFile.getParentFile();
             FileObserver observer = new FileObserver(parentDirectory.getPath(),
@@ -115,34 +114,6 @@ public class MainActivity extends Activity {
             };
             observer.startWatching();
         }
-    }
-
-    private void processPicture(File pictureFile) {
-        Log.v(TAG, "photo complete");
-        ApiClientProvider.provideApiClient().uploadPhoto(
-                "en_US",
-                new TypedFile("image/*", pictureFile),
-                new Callback<UploadResponse>() {
-                    @Override
-                    public void success(UploadResponse uploadResponse, Response response) {
-                        ApiClientProvider.provideApiClient().getPhoto(uploadResponse.token, new Callback<RecognizeResponse>() {
-                            @Override
-                            public void success(RecognizeResponse recognizeResponse, Response response) {
-                                Log.v(TAG, recognizeResponse.name);
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                Log.v(TAG, "error");
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.v(TAG, "error");
-                    }
-                });
     }
 
 }

@@ -5,4 +5,5 @@ package com.hackatonglass2014.finderforglass;
  */
 public class Constants {
     public static final String TOKEN = "PU5YcuAMcSmshzFkWvzlKZJZyY1Wp1MREknjsn2lKPu5urU6b3";
+    public static final String PHOTO_PATH_EXTRA = "photo_path";
 }
