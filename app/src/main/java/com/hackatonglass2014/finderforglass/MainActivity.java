@@ -10,7 +10,9 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.google.android.glass.content.Intents;
 import com.google.android.glass.media.Sounds;
@@ -34,56 +36,66 @@ public class MainActivity extends Activity {
 
     private static final int CAMERA_REQUEST_CODE = 100;
 
-    private CardScrollView mCardScroller;
+//    private CardScrollView mCardScroller;
 
-    private View mView;
+    private TextView mView;
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
-        mView = buildView();
-
-        mCardScroller = new CardScrollView(this);
-        mCardScroller.setAdapter(new CardScrollAdapter() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        mView = buildView();
+//
+//        mCardScroller = new CardScrollView(this);
+//        mCardScroller.setAdapter(new CardScrollAdapter() {
+//            @Override
+//            public int getCount() {
+//                return 1;
+//            }
+//
+//            @Override
+//            public Object getItem(int position) {
+//                return mView;
+//            }
+//
+//            @Override
+//            public View getView(int position, View convertView, ViewGroup parent) {
+//                return mView;
+//            }
+//
+//            @Override
+//            public int getPosition(Object item) {
+//                if (mView.equals(item)) {
+//                    return 0;
+//                }
+//                return AdapterView.INVALID_POSITION;
+//            }
+//        });
+//        mCardScroller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_REQUEST_CODE);
+//                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//                am.playSoundEffect(Sounds.DISALLOWED);
+//            }
+//        });
+        setContentView(R.layout.ac_main);
+        mView = (TextView) findViewById(R.id.open_camera);
+        mView.setOnClickListener( new View.OnClickListener() {
             @Override
-            public int getCount() {
-                return 1;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return mView;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                return mView;
-            }
-
-            @Override
-            public int getPosition(Object item) {
-                if (mView.equals(item)) {
-                    return 0;
-                }
-                return AdapterView.INVALID_POSITION;
-            }
-        });
-        mCardScroller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View view) {
                 startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_REQUEST_CODE);
                 AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                am.playSoundEffect(Sounds.DISALLOWED);
+                am.playSoundEffect(Sounds.TAP);
             }
         });
-        setContentView(mCardScroller);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mCardScroller.activate();
+//        mCardScroller.activate();
     }
 
     @Override
@@ -160,14 +172,14 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPause() {
-        mCardScroller.deactivate();
+//        mCardScroller.deactivate();
         super.onPause();
     }
 
-    private View buildView() {
-        CardBuilder card = new CardBuilder(this, CardBuilder.Layout.TEXT);
-        card.setText(R.string.hello_world);
-        return card.getView();
-    }
+//    private View buildView() {
+//        CardBuilder card = new CardBuilder(this, CardBuilder.Layout.TEXT);
+//        card.setText(R.string.hello_world);
+//        return card.getView();
+//    }
 
 }

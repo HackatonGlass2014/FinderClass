@@ -1,2 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
-<trigger command="FINDER_FOR_GLASS" />
+
+<trigger keyword="FINDER" />
